@@ -1,5 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
+const DateTime = require("tedious/lib/data-types/datetime");
 const sequelize = require("../db_connection");
+
 
 const Post = sequelize.define(
   "Post",
@@ -12,8 +14,9 @@ const Post = sequelize.define(
     Titulo: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
-        len: [5, 20],
+        len: [5, 60],
       },
     },
     Contenido: {
@@ -27,19 +30,21 @@ const Post = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    Categoria: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     Fecha_de_Creacion: {
       type: DataTypes.DATE,
       allowNull: false,
+      defaultValue: Date('now')
     },
+    categoryID:{
+      type:DataTypes.INTEGER,
+      allowNull:false
+    }
   },
   {
     timestamps: false,
     tableName: "Posts",
   }
 );
+
 
 module.exports = Post;

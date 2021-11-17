@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 
 
-const sequelize = new Sequelize("disneydb", process.env.DB_USER,process.env.DB_PASS, {
+const sequelize = new Sequelize("cryptoblog", process.env.DB_USER,process.env.DB_PASS, {
   dialect: "mssql",
   host: process.env.HOST,
   port: process.env.DB_PORT,
