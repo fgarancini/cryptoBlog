@@ -22,13 +22,41 @@ exports.create = async (req, res) => {
 };
 
 exports.getAll = async (req, res) => {
-  const Categories = await Category.findAll({
-    include: [{ model: Post, as: "Posts", }],
-  });
-  res.status(200).json({
-    success: "success",
-    data: {
-      Categories,
-    },
-  });
+  await Category.findAll({
+    include: [{ model: Post, as: "Posts" }],
+  })
+    .then((Categories) =>
+      res.status(200).json({
+        success: "success",
+        data: {
+          Categories,
+        },
+      })
+    )
+    .catch((err) =>
+      res.status(404).json({
+        success: "fail",
+        err,
+      })
+    );
 };
+
+exports.getByID = async (req,res) => {
+  await Category.findAll({where: {id:req.params.id},
+    include: [{ model: Post, as: "Posts" }],
+  })
+    .then((Categories) =>
+      res.status(200).json({
+        success: "success",
+        data: {
+          Categories,
+        },
+      })
+    )
+    .catch((err) =>
+      res.status(404).json({
+        success: "fail",
+        err,
+      })
+    );
+}

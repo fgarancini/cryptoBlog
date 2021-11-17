@@ -17,6 +17,7 @@ const Post = sequelize.define(
       unique: true,
       validate: {
         len: [5, 60],
+        
       },
     },
     Contenido: {

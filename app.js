@@ -7,7 +7,6 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const postRoutes = require('./routes/postRoutes');
 
 app.use(express.json());
-
 app.use(morgan("dev"));
 
 app.use("/api/v1/posts",postRoutes);

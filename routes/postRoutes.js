@@ -9,8 +9,12 @@ const upload = require("../utils/imageHandler");
 router
   .route("/")
   .get(postController.getAll)
-  .post(upload.single("imagen"), postController.create);
+  .post(upload.single("imagen"), postController.validaImagen,postController.create);
 
-router.route("/:id").get(postController.get);
+router
+  .route("/:id")
+  .get(postController.getByID)
+  .patch(postController.update)
+  .delete(postController.delete);
 
 module.exports = router;
