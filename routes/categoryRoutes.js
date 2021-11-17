@@ -6,7 +6,7 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(categoryController.get)
+  .get(categoryController.getAll)
   .post(categoryController.create);
 
 module.exports = router;
