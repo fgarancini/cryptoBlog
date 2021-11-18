@@ -6,7 +6,8 @@ exports.validaImagen = (req, res, next) => {
 
   if (
     fileName.toLowerCase().endsWith(".jpeg") ||
-    fileName.toLowerCase().endsWith(".png")
+    fileName.toLowerCase().endsWith(".jpg") ||
+    fileName.toLowerCase().endsWith(".png") 
   ) {
     next();
   } else {
@@ -96,18 +97,20 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
   await Post.destroy({ where: { ID: req.params.id } })
-    .then((res) =>
-      res.status(200).json({
+    .then((res) =>{
+      console.log(res);
+      res.status(204).json({
         status: "success",
         data: {
           res,
         },
-      })
+      })}
     )
-    .catch((err) =>
+    .catch((err) =>{
+    console.log(err);
       res.status(404).json({
         status: "fail",
         err,
-      })
+      })}
     );
 };

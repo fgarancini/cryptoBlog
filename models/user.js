@@ -10,20 +10,28 @@ const User = sequelize.define(
       autoIncrement: true,
       type: DataTypes.INTEGER,
     },
+    mail: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique:true,
+      validate: {
+        isEmail:true,
+      },
+    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
       unique:true,
       validate: {
-        len: [8, 12],
-        is: /^[0-9a-f]{64}$/i
+        len: [8, 15],
+        is: ["^[a-z]+$",'i']
       },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        len: [8, 12],
+        len: [8, 15],
       },
     },
   },
@@ -52,9 +60,9 @@ const User = sequelize.define(
   }
 );
 
-(async () => {
-  await sequelize.sync({ force: true });
-  // Code here
-})();
+// (async () => {
+//   await sequelize.sync({ force: true });
+//   // Code here
+// })();
 
 module.exports = User;
