@@ -20,7 +20,7 @@ router
 router
   .route("/:id")
   .get(postController.getByID)
-  .patch(userController.singToken, postController.update)
-  .delete(userController.singToken, postController.delete);
+  .patch(userController.singToken,postController.update)
+  .delete(userController.singToken,userController.authAdmin, postController.delete);
 
 module.exports = router;

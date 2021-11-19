@@ -1,7 +1,16 @@
 const User = require("../Models/user");
-const jsonwebtoken = require('jsonwebtoken');
+const jsonwebtoken = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+exports.authAdmin = (req,res,next) => {
+  if(req.decoded.typeMod == 1 || req.decoded.typeMod == 2){
+    next();
+  }else{
+    return res.status(401).send({
+      mensaje: "Unauthorized.",
+    });
+  }
+}
 
 exports.singToken = async (req, res, next) => {
   const beartoken = req.headers["authorization"];
@@ -9,14 +18,14 @@ exports.singToken = async (req, res, next) => {
   if (jtw_) {
     jsonwebtoken.verify(jtw_, process.env.TOKEN_KEY, (err, decoded) => {
       if (err) {
-        return res.json({ mensaje: "Token inválida" });
+        return res.status(403).json({ mensaje: "Token inválida" });
       } else {
         req.decoded = decoded;
         next();
       }
     });
   } else {
-    res.send({
+    res.status(403).send({
       mensaje: "Token no proveída.",
     });
   }
@@ -24,31 +33,42 @@ exports.singToken = async (req, res, next) => {
 
 exports.userLogin = async (req, res) => {
   if (await authUser(req.body)) {
-    const token = jsonwebtoken.sign({ check: true }, process.env.TOKEN_KEY, {
-      expiresIn: 1440,
+    const token = jsonwebtoken.sign({ check: true,typeMod:req.body.type }, process.env.TOKEN_KEY, {
+      expiresIn: "1d",
+      
     });
-    res.json({
+    res.status(200).json({
       mensaje: "Autenticacion exitosa",
       token: token,
     });
   } else {
-    res.json({
+    res.status(404).json({
       mensaje: "Contraseña o usuario incorrecto",
     });
   }
 };
 
 exports.userRegister = async (req, res) => {
-  const newUser = await User.create({
+  await User.create({
+    mail: req.body.mail,
     username: req.body.username,
     password: req.body.password,
-  }).catch(err => newUser = err);
-  res.status(200).json({
-    status: "success",
-    data: {
-      user: newUser,
-    },
-  });
+    type: req.body.type,
+  })
+    .then((user) =>
+      res.status(200).json({
+        status: "success",
+        data: {
+          user,
+        },
+      })
+    )
+    .catch((err) =>
+      res.status(400).json({
+        status: "fail",
+        err:err.message,
+      })
+    );
 };
 
 const authUser = async (user) => {

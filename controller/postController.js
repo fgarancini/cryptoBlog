@@ -16,6 +16,7 @@ exports.validaImagen = (req, res, next) => {
 };
 
 exports.create = async (req, res) => {
+  console.log(req.body);
   await Post.create({
     Titulo: req.body.Titulo,
     Contenido: req.body.Contenido,
@@ -33,7 +34,7 @@ exports.create = async (req, res) => {
     .catch((err) =>
       res.status(404).json({
         status: "fail",
-        err,
+        err:err.message,
       })
     );
 };

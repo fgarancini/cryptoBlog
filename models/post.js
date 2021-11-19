@@ -29,7 +29,7 @@ const Post = sequelize.define(
     },
     Imagen: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     Fecha_de_Creacion: {
       type: DataTypes.DATE,

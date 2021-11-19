@@ -13,31 +13,49 @@ const User = sequelize.define(
     mail: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique:true,
+      unique: true,
       validate: {
-        isEmail:true,
+        isEmail: true,
       },
     },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique:true,
+      unique: true,
       validate: {
         len: [8, 15],
-        is: ["^[a-z]+$",'i']
+        is: ["^[a-z]+$", "i"],
       },
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
       validate: {
         len: [8, 15],
+        checkPass(password) {
+          if (password.lenght <= 8) {
+            throw new Error("Password too short!");
+          } else if (password.lenght >= 16) {
+            throw new Error("Password too long!");
+          }
+        },
+      },
+    },
+    type: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        checkNum(value) {
+          if (!(value >= 1 || value <= 3)) {
+            throw new Error("Type not avalible");
+          }
+        },
       },
     },
   },
   {
     timestamps: false,
-    tableName:"Usuarios",
+    tableName: "Usuarios",
     hooks: {
       beforeCreate: async (user) => {
         if (user.password) {
